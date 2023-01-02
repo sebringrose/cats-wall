@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Catarina's Wall</title>
+  <style>
+    html, body {
+      margin: 0;
+      width: 100%;
+      height: 100%;
+      font-family: cursive;
+      position: relative;
+    }
+    header {
+      padding-top: 10vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      z-index: 3;
+    }
+    #wall-wrapper {
+      position: absolute;
+      z-index: 1;
+      bottom: 0;
+      margin-top: auto;
+      width: 100vw;
+      display: flex;
+      flex-wrap: wrap;
+    }
+    #wall-wrapper .wall-key {
+      box-sizing: border-box;
+      border: 2px solid grey;
+      width: calc(100vw / 9);
+      height: calc((100vw / 9) + 5px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 48px;
+      color: #222;
+    }
+  </style>
+  <link rel="stylesheet" href="people.css">
+  <link rel="icon" href="1f3b9.svg" type="image/svg+xml">
+</head>
+<body>
+  <header>
+    <h1>Music brings togetherness</h1>
+  
+    <p id="controls">
+      Type to play, press space to start recording and again to loop!
+    </p>
+  </header>
+
+  <div id="wall-wrapper">
+    <div id="people">
+      <div id="person-1" class="person">
+        <div class="person-head">&nbsp;</div>
+        <div class="person-body">&nbsp;</div>
+        <div class="person-legs">
+          <div id="left-leg" class="person-leg">&nbsp;</div>
+          <div id="right-leg" class="person-leg">&nbsp;</div>
+        </div>
+      </div>
+      <div id="person-2" class="person">
+        <div class="person-head">&nbsp;</div>
+        <div class="person-body">&nbsp;</div>
+        <div class="person-legs">
+          <div id="left-leg" class="person-leg">&nbsp;</div>
+          <div id="right-leg" class="person-leg">&nbsp;</div>
+        </div>
+      </div>
+    </div>
+    <input 
+      id="wall-input" 
+      type="textarea" 
+      style="position: absolute; bottom: 0; z-index: -1;"
+    >
+  </div>
+
+  <script src="cre8.js"></script>
+  <script>
+    const wallWrapper = document.querySelector("#wall-wrapper")
+    const wallInput = document.querySelector("#wall-input")
+    const controlsText = document.querySelector("#controls")
+    const person1 = document.querySelector("#person-1")
+    const person2 = document.querySelector("#person-2")
+    let recording = false
+    let playing = false
+    let loop = []
+    let playback = []
+    let playIndex = 0
+
+    person1.kick = person2.kick = function (lr, hl) {
+      if (this[`${lr}LegInterval`]) clearInterval(this[`${lr}LegInterval`])
+      const leg = this.querySelector(`#${lr}-leg`)
+      leg.style.transform = `translateY(${hl === "high" ? "-20%" : "20%"})`
+      this[`${lr}LegInterval`] = setInterval(() => {
+        leg.style.transform = "unset"
+      }, 200)
+    }
+    person2.style.left = "calc((200vw / 9) * 2)";
+
+    const sound_keys = {
+      q: new Audio("notes/kick.mp3"), w: new Audio("notes/snare.mp3"),
+      e: new Audio("notes/a2.mp3"), r: new Audio("notes/b2.mp3"),
+      t: new Audio("notes/c_sharp3.mp3"), y: new Audio("notes/d3.mp3"),
+      u: new Audio("notes/e3.mp3"), i: new Audio("notes/f_sharp3.mp3"),
+      o: new Audio("notes/g_sharp3.mp3"), // p: new Audio("notes/a3.mp3"),
+      a: new Audio("notes/hi-hat.mp3"), s: new Audio("notes/crash.mp3"), 
+      d: new Audio("notes/a1.mp3"), f: new Audio("notes/b1.mp3"), 
+      g: new Audio("notes/c_sharp2.mp3"), h: new Audio("notes/d2.mp3"), 
+      j: new Audio("notes/e2.mp3"), k: new Audio("notes/f_sharp2.mp3"), 
+      l: new Audio("notes/g_sharp2.mp3")
+    }
+    const keys = Object.keys(sound_keys)
+    const colors = [
+      "lavender", "lavender",
+      "purple", "blueviolet", "cornflowerblue", "seagreen", "yellowgreen", "orange", "firebrick",
+      "lavender", "lavender",
+      "purple", "blueviolet", "cornflowerblue", " seagreen", "yellowgreen", "orange", "firebrick",
+    ]
+
+    keys.forEach((key, i) => {
+      cre8("div", { 
+        className: "wall-key",
+        style: `background-color: ${colors[i]}`,
+        textContent: key,
+      }, wallWrapper)
+    })
+
+    wallInput.addEventListener("input", (e) => kickWall(e.data))
+    wallWrapper.addEventListener("click", () => wallInput.select())
+    wallInput.select()
+
+    function kickWall (key) {
+      const i = keys.indexOf(key)
+      if (i === -1 && key !== " ") return
+
+      console.log(`kicked ${key}`)
+
+      if (!recording) {
+        if (key === " ") {
+          stopLoop()
+          startRecording()
+        } else playSound(sound_keys[key])
+      } else {
+        if (key === " ") {
+          stopRecording()
+          loop.push({ key: "end", time: Date.now() })
+          playback = loop
+          loop = []
+          return playLoop()
+        } else {
+          playSound(sound_keys[key])
+          loop.push({ key, time: Date.now() })
+        }
+      }
+
+      if (i == 0 || i == 1 || i == 9 || i == 10) {
+        person1.style.left = "0";
+        person1.kick((i === 0 || i === 9) ? "left" : "right", i < 9 ? "high" : "low")
+      }
+      if (i == 2 || i == 3 || i == 11 || i == 12) {
+        person1.style.left = "calc((200vw / 9) * 1)";
+        person1.kick((i === 2 || i === 11) ? "left" : "right", i < 9 ? "high" : "low")
+      }
+      if (i == 4 || i == 5 || i == 13 || i == 14) {
+        person2.style.left = "calc((200vw / 9) * 2)";
+        person2.kick((i === 4 || i === 13) ? "left" : "right", i < 9 ? "high" : "low")
+      }
+      if (i == 6 || i == 7 || i == 15 || i == 16) {
+        person2.style.left = "calc((200vw / 9) * 3)";
+        person2.kick((i === 6 || i === 15) ? "left" : "right", i < 9 ? "high" : "low")
+      }
+      if (i == 8 || i == 17) {
+        person2.style.left = "calc((200vw / 9) * 3.5)";
+        person2.kick("right", i < 9 ? "high" : "low")
+      }
+    }
+
+    function playSound (audio) {
+      new Audio(audio.src).play()
+    }
+
+    function startRecording () {
+      recording = true
+      controls.textContent = "🔴"
+    }
+
+    function stopRecording () {
+      recording = false
+      controls.textContent = "🔁"
+    }
+
+    async function playLoop () {
+      playing = true
+      while (playing && playIndex < playback.length-1) {
+        playSound(sound_keys[playback[playIndex].key])
+        await new Promise(res => setTimeout(() => res(), playback[playIndex+1].time - playback[playIndex].time))
+        playIndex++
+      }
+      if (playing) {
+        playIndex = 0
+        playLoop()
+      }
+    }
+
+    function stopLoop () {
+      playing = false
+    }
+  </script>
+</body>
+</html>

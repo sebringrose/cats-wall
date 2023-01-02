@@ -1,0 +1,60 @@
+#people {
+  margin-top: 50px;
+  height: calc(200vw / 9);
+  width: 100%;
+  display: flex;
+  overflow: visible;
+  position: relative;
+}
+.person {
+  box-sizing: border-box;
+  height: 100%;
+  width: calc(200vw / 9);
+  padding: 0 10px;
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  z-index: 2;
+}
+#person-1 * {
+  background-color: peachpuff;
+}
+#person-2 { 
+  padding: 0 15px;
+}
+#person-2 * {
+  background-color: tan;
+}
+
+.person-head {
+  height: 30%;
+  width: 30%;
+  margin: auto;
+  border-radius: 50%;
+}
+
+.person-body {
+  flex: 1;
+  width: 60%;
+  margin: auto;
+}
+
+.person-legs {
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%);
+  top: 80%;
+  height: 70%;
+  width: 40%;
+  display: flex;
+  justify-content: space-between;
+  background-color: unset !important;
+}
+
+.person-leg {
+  width: 40%;
+  height: 100%;
+  background-color: inherit;
+  border: 1px solid black;
+}
+
