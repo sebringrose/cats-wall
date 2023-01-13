@@ -12,6 +12,9 @@
       height: 100%;
       font-family: cursive;
       position: relative;
+      background-image: url('/images/combined.png');
+      background-size: cover;
+      background-position: center;
     }
     header {
       padding-top: 10vh;
@@ -29,6 +32,7 @@
       width: 100vw;
       display: flex;
       flex-wrap: wrap;
+      opacity: 0.3;
     }
     #wall-wrapper .wall-key {
       box-sizing: border-box;
@@ -47,10 +51,10 @@
 </head>
 <body>
   <header>
-    <h1>Music brings togetherness</h1>
+    <!-- <h1>Music brings togetherness</h1> -->
   
     <p id="controls">
-      Type to play, press space to start recording and again to loop!
+      <!-- Type to play, press space to start recording and again to loop! -->
     </p>
   </header>
 
@@ -104,16 +108,16 @@
     person2.style.left = "calc((200vw / 9) * 2)";
 
     const sound_keys = {
-      q: new Audio("notes/kick.mp3"), w: new Audio("notes/snare.mp3"),
-      e: new Audio("notes/a2.mp3"), r: new Audio("notes/b2.mp3"),
-      t: new Audio("notes/c_sharp3.mp3"), y: new Audio("notes/d3.mp3"),
-      u: new Audio("notes/e3.mp3"), i: new Audio("notes/f_sharp3.mp3"),
-      o: new Audio("notes/g_sharp3.mp3"), // p: new Audio("notes/a3.mp3"),
-      a: new Audio("notes/hi-hat.mp3"), s: new Audio("notes/crash.mp3"), 
-      d: new Audio("notes/a1.mp3"), f: new Audio("notes/b1.mp3"), 
-      g: new Audio("notes/c_sharp2.mp3"), h: new Audio("notes/d2.mp3"), 
-      j: new Audio("notes/e2.mp3"), k: new Audio("notes/f_sharp2.mp3"), 
-      l: new Audio("notes/g_sharp2.mp3")
+      q: "notes/kick.mp3", w: "notes/snare.mp3",
+      e: "notes/a2.mp3", r: "notes/b2.mp3",
+      t: "notes/c_sharp3.mp3", y: "notes/d3.mp3",
+      u: "notes/e3.mp3", i: "notes/f_sharp3.mp3",
+      o: "notes/g_sharp3.mp3", // p: new Audio("notes/a3.mp3"),
+      a: "notes/hi-hat.mp3", s: "notes/crash.mp3", 
+      d: "notes/a1.mp3", f: "notes/b1.mp3", 
+      g: "notes/c_sharp2.mp3", h: "notes/d2.mp3", 
+      j: "notes/e2.mp3", k: "notes/f_sharp2.mp3", 
+      l: "notes/g_sharp2.mp3"
     }
     const keys = Object.keys(sound_keys)
     const colors = [
@@ -181,8 +185,8 @@
       }
     }
 
-    function playSound (audio) {
-      new Audio(audio.src).play()
+    function playSound (src) {
+      new Audio(src).play()
     }
 
     function startRecording () {

@@ -17,13 +17,13 @@
   z-index: 2;
 }
 #person-1 * {
-  background-color: peachpuff;
+  /* background-color: peachpuff; */
 }
 #person-2 { 
   padding: 0 15px;
 }
 #person-2 * {
-  background-color: tan;
+  /* background-color: tan; */
 }
 
 .person-head {
@@ -48,13 +48,13 @@
   width: 40%;
   display: flex;
   justify-content: space-between;
-  background-color: unset !important;
+  /* background-color: unset !important; */
 }
 
 .person-leg {
   width: 40%;
   height: 100%;
-  background-color: inherit;
-  border: 1px solid black;
+  /* background-color: inherit;
+  border: 1px solid black; */
 }
 
